@@ -13,12 +13,9 @@ namespace GameOfLife
 {
     public partial class MainForm : Form
     {
-        private int currentGeneration = default;
         private Graphics graphics;
         private int resolution;
-        private bool[,] field;
-        private int rows;
-        private int columns;
+        private GameEngine gameEngine;
 
         private Color color;
         private Brush brushes;
@@ -32,26 +29,17 @@ namespace GameOfLife
         {
             if (timer1.Enabled) return;
 
-            currentGeneration = default;
-            Text = $"Generation {currentGeneration}";
-
             nudResolution.Enabled = false;
             nudDensity.Enabled = false;
             cbColorPatterns.Enabled = false;
-
             resolution = (int)nudResolution.Value;
-            rows = pictureBox1.Right / resolution;
-            columns = pictureBox1.Width / resolution;
-            field = new bool[columns, rows];
 
-            Random random = new Random();
-            for(int x = 0; x < columns; x++)
-            {
-                for(int y = 0; y < rows; y++)
-                {
-                    field[x, y] = random.Next((int)nudDensity.Value) == 0;
-                }
-            }
+            gameEngine = new GameEngine
+            (
+                _rows: pictureBox1.Right / resolution,
+                _columns: pictureBox1.Width / resolution,
+                _density: (int)nudDensity.Minimum + (int)nudDensity.Maximum - (int)nudDensity.Value 
+            );
 
             pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             graphics = Graphics.FromImage(pictureBox1.Image);
@@ -68,54 +56,25 @@ namespace GameOfLife
             nudDensity.Enabled = true;
             cbColorPatterns.Enabled = true;
         }
-
-        private void NextGeneration()
+        
+        private void DrawNextGeneration()
         {
             graphics.Clear(color);
 
-            var newField = new bool[columns, rows];
+            var field = gameEngine.GetCurrentGeneration();
 
-            for (int x = 0; x < columns; x++)
+            for(int x = 0; x < field.GetLength(0); x++)
             {
-                for (int y = 0; y < rows; y++)
+                for(int y = 0; y < field.GetLength(1); y++)
                 {
-                    var neighboursCount = CountNeighbours(x, y);
-                    var hasLife = field[x, y];
-
-                    if(!hasLife && neighboursCount == 3)
-                        newField[x, y] = true;
-                    else if(hasLife && (neighboursCount < 2 || neighboursCount > 3)) 
-                        newField[x, y] = false;
-                    else
-                        newField[x, y] = field[x, y];
-
-                    if(hasLife) graphics.FillRectangle(brushes, x * resolution, y * resolution, resolution, resolution);
+                    if(field[x, y])
+                        graphics.FillRectangle(brushes, x * resolution, y * resolution, resolution - 1, resolution - 1);
                 }
             }
 
-            field = newField;
             pictureBox1.Refresh();
-            Text = $"Generation {++currentGeneration}";
-        }
-
-        private int CountNeighbours(int x, int y)
-        {
-            int count = default;
-
-            for(int i = -1; i < 2; i++)
-            {
-                for (int j = -1; j < 2; j++)
-                {
-                    var column = (x + i + columns) % columns;
-                    var row = (y + j + rows) % rows;
-
-                    var isSelfChecking = column == x && row == y;
-                    var hasLife = field[column, row];
-
-                    if (hasLife && !isSelfChecking) count++;
-                }
-            }
-            return count;
+            Text = $"Generation {gameEngine.CurrentGeneration}";
+            gameEngine.NextGeneration();
         }
 
         private void ColorPatterns()
@@ -134,7 +93,7 @@ namespace GameOfLife
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            NextGeneration();
+            DrawNextGeneration();
         }
 
         private void startButton_Click(object sender, EventArgs e)
@@ -155,6 +114,27 @@ namespace GameOfLife
         private void cbColorPatterns_SelectedValueChanged(object sender, EventArgs e)
         {
             ColorPatterns();
+        }
+
+        private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (!timer1.Enabled) return;
+
+            if(e.Button == MouseButtons.Left)
+            {
+                var x = e.Location.X / resolution;
+                var y = e.Location.Y / resolution;
+
+                gameEngine.AddCell(x, y);
+            }
+
+            if(e.Button == MouseButtons.Right)
+            {
+                var x = e.Location.X / resolution;
+                var y = e.Location.Y / resolution;
+
+                gameEngine.RemoveCell(x, y);
+            }
         }
     }
 }

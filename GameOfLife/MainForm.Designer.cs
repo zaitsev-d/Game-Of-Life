@@ -30,6 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.label3 = new System.Windows.Forms.Label();
+            this.cbColorPatterns = new System.Windows.Forms.ComboBox();
             this.stopButton = new System.Windows.Forms.Button();
             this.startButton = new System.Windows.Forms.Button();
             this.nudDensity = new System.Windows.Forms.NumericUpDown();
@@ -38,8 +40,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.cbColorPatterns = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -77,6 +77,37 @@
             this.splitContainer1.SplitterDistance = 170;
             this.splitContainer1.TabIndex = 0;
             // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(30, 16);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(118, 18);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "Color Patterns";
+            // 
+            // cbColorPatterns
+            // 
+            this.cbColorPatterns.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbColorPatterns.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbColorPatterns.FormattingEnabled = true;
+            this.cbColorPatterns.Items.AddRange(new object[] {
+            "Crimson - Black",
+            "Dark Blue",
+            "Negative World",
+            "Infinity Void",
+            "Desert World",
+            "Red Room",
+            "Green - Yellow"});
+            this.cbColorPatterns.Location = new System.Drawing.Point(11, 44);
+            this.cbColorPatterns.Name = "cbColorPatterns";
+            this.cbColorPatterns.Size = new System.Drawing.Size(146, 26);
+            this.cbColorPatterns.TabIndex = 1;
+            this.cbColorPatterns.SelectedValueChanged += new System.EventHandler(this.cbColorPatterns_SelectedValueChanged);
+            // 
             // stopButton
             // 
             this.stopButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -109,6 +140,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.nudDensity.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.nudDensity.Location = new System.Drawing.Point(11, 193);
+            this.nudDensity.Maximum = new decimal(new int[] {
+            25,
+            0,
+            0,
+            0});
             this.nudDensity.Minimum = new decimal(new int[] {
             2,
             0,
@@ -119,7 +155,7 @@
             this.nudDensity.TabIndex = 3;
             this.nudDensity.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudDensity.Value = new decimal(new int[] {
-            2,
+            25,
             0,
             0,
             0});
@@ -147,7 +183,7 @@
             0,
             0});
             this.nudResolution.Minimum = new decimal(new int[] {
-            1,
+            2,
             0,
             0,
             0});
@@ -156,7 +192,7 @@
             this.nudResolution.TabIndex = 1;
             this.nudResolution.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudResolution.Value = new decimal(new int[] {
-            1,
+            2,
             0,
             0,
             0});
@@ -180,42 +216,12 @@
             this.pictureBox1.Size = new System.Drawing.Size(848, 569);
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
             // 
             // timer1
             // 
             this.timer1.Interval = 30;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // cbColorPatterns
-            // 
-            this.cbColorPatterns.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbColorPatterns.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbColorPatterns.FormattingEnabled = true;
-            this.cbColorPatterns.Items.AddRange(new object[] {
-            "Crimson - Black",
-            "Dark Blue",
-            "Negative World",
-            "Infinity Void",
-            "Desert World",
-            "Red Room",
-            "Green - Yellow"});
-            this.cbColorPatterns.Location = new System.Drawing.Point(11, 44);
-            this.cbColorPatterns.Name = "cbColorPatterns";
-            this.cbColorPatterns.Size = new System.Drawing.Size(146, 26);
-            this.cbColorPatterns.TabIndex = 1;
-            this.cbColorPatterns.SelectedValueChanged += new System.EventHandler(this.cbColorPatterns_SelectedValueChanged);
-            // 
-            // label3
-            // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(30, 16);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(118, 18);
-            this.label3.TabIndex = 6;
-            this.label3.Text = "Color Patterns";
             // 
             // MainForm
             // 
